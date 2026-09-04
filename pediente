@@ -1,0 +1,35 @@
+#1  Crear broker-protocol
+#2  Tipar Request/Response
+#3  Eliminar serde_json::Value del core
+#4  Tipar errores públicos
+#5  Implementar length-prefixed framing
+#6  Añadir límites de frame
+#7  Añadir timeouts IPC
+#8  Añadir concurrencia limitada
+#9  Endpoint IPC per-user
+#10 Permisos/ACL del endpoint
+#11 Rediseñar CallerIdentity
+#12 Incluir UID/SID en policy
+#13 Fingerprint opcional de executable
+#14 Crear AuthorizationRequest
+#15 Añadir CredentialId
+#16 Añadir Resource a policy
+#17 Policy deny-by-default por recurso
+#18 Renombrar actual CredentialManager
+#19 Crear CredentialManager real
+#20 Crear wrappers de secretos
+#21 Crear namespaces provider-scoped
+#22 Crear MemorySecretStore
+#23 Crear AuditEvent
+#24 Hacer AuditSink fallible
+#25 Añadir request_id
+#26 Crear FakeCryptoProvider
+#27 Crear secret canary
+#28 Integration tests
+#29 Security tests
+#30 IPC adversarial tests
+#31 Canary leak tests
+#32 CI Linux/Windows/macOS
+#33 Completar threat model
+#34 Completar security invariants
+#35 ARCHITECTURE + PROTOCOL + SECURITY docs
