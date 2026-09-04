@@ -1,0 +1,6 @@
+[package]
+name = "broker-audit"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

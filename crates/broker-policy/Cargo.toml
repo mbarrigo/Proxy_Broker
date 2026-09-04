@@ -1,0 +1,6 @@
+[package]
+name = "broker-policy"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

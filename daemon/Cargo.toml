@@ -1,0 +1,11 @@
+[package]
+name = "daemon"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+broker-core = { path = "../crates/broker-core" }
+broker-policy = { path = "../crates/broker-policy" }
+provider-ssh = { path = "../providers/ssh" }
+provider-totp = { path = "../providers/totp" }
+provider-github = { path = "../providers/github" }

@@ -1,0 +1,11 @@
+[package]
+name = "broker-core"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+broker-identity = { path = "../broker-identity" }
+broker-policy = { path = "../broker-policy" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

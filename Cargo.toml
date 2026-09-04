@@ -1,17 +1,17 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/ipc",
-    "crates/peer-identity",
-    "crates/secret-store",
-    "crates/policy",
-    "crates/credential-manager",
-    "crates/adapter-ssh",
-    "crates/adapter-totp",
-    "crates/adapter-github",
-    "crates/http-relay",
-    "crates/audit",
-    "crates/daemon",
+    "crates/broker-ipc",
+    "crates/broker-identity",
+    "crates/broker-storage",
+    "crates/broker-policy",
+    "crates/broker-core",
+    "crates/broker-audit",
+    "crates/broker-http-relay",
+    "providers/ssh",
+    "providers/totp",
+    "providers/github",
+    "daemon",
 ]
 
 [workspace.package]

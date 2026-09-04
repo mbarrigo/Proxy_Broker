@@ -1,0 +1,6 @@
+[package]
+name = "broker-http-relay"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

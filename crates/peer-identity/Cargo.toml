@@ -1,7 +1,0 @@
-[package]
-name = "peer-identity"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-thiserror = { workspace = true }

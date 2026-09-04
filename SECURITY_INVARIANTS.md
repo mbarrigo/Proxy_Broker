@@ -12,7 +12,7 @@ que se derivan.
 Una credencial marcada como non-exportable (clave privada SSH, seed
 TOTP) nunca puede aparecer en una respuesta IPC.
 
-`ProviderAdapter::execute` (`crates/credential-manager`) devuelve el
+`ProviderAdapter::execute` (`crates/broker-core`) devuelve el
 **resultado** de la operación, nunca el secreto usado para producirlo —
 la firma del trait no da forma de devolver el secreto por accidente,
 pero un adapter mal escrito podría meterlo en el `serde_json::Value` de
@@ -24,7 +24,7 @@ clave, etc.) en su output.
 
 Los secretos nunca aparecen en el audit log.
 
-`audit::AuditEntry` (`crates/audit`) solo tiene campos para
+`broker_audit::AuditEntry` (`crates/broker-audit`) solo tiene campos para
 caller/provider/action/decisión — no existe campo para el valor de la
 credencial ni para el payload completo de la operación.
 
@@ -34,7 +34,7 @@ Toda operación pasa por el motor de políticas antes de ejecutarse — no
 existe ninguna ruta que invoque `ProviderAdapter::execute` sin haber
 consultado antes `PolicyEngine::evaluate`.
 
-`CredentialManager::dispatch` (`crates/credential-manager`) es el único
+`CredentialManager::dispatch` (`crates/broker-core`) es el único
 punto de entrada previsto hacia los adapters; no debería añadirse nunca
 un segundo camino que los llame directamente.
 
@@ -52,7 +52,7 @@ del roadmap.
 Un provider solo accede a los secretos de su propio namespace en el
 `SecretStore`; no puede leer los de otro provider.
 
-Estado actual: **no aplica todavía** — `SecretStore` (`crates/secret-store`)
+Estado actual: **no aplica todavía** — `SecretStore` (`crates/broker-storage`)
 no tiene noción de namespace por provider; `InMemoryStore` es una única
 tabla plana. Diseñar el prefijo/namespace antes de conectar un backend
 real, no después.

@@ -24,26 +24,27 @@ cargo run --bin daemon
 
 ```
 crates/
-├── ipc/                   # socket Unix / Named Pipe + framing del protocolo
-├── peer-identity/         # SO_PEERCRED / getpeereid / GetNamedPipeClientProcessId
-├── secret-store/          # abstracción sobre Keychain / DPAPI / Secret Service
-├── policy/                # motor de políticas: allow / deny / ask-user
-├── credential-manager/    # trait ProviderAdapter + lifecycle + dispatch
-├── adapter-ssh/           # firma vía protocolo real de ssh-agent
-├── adapter-totp/          # RFC 6238
-├── adapter-github/        # OAuth 2.0 + PKCE + mapeo semántico de scopes
-├── http-relay/            # cliente HTTP, validación TLS, inyección de header
-├── audit/                 # log append-only de decisiones (nunca del secreto)
-└── daemon/                # binario final — junta todo
+├── broker-ipc/             # socket Unix / Named Pipe + framing del protocolo
+├── broker-identity/        # SO_PEERCRED / getpeereid / GetNamedPipeClientProcessId
+├── broker-storage/         # abstracción sobre Keychain / DPAPI / Secret Service
+├── broker-policy/          # motor de políticas: allow / deny / ask-user
+├── broker-core/            # trait ProviderAdapter + lifecycle + dispatch
+├── broker-audit/           # log append-only de decisiones (nunca del secreto)
+└── broker-http-relay/      # cliente HTTP, validación TLS, inyección de header
+providers/
+├── ssh/                    # firma vía protocolo real de ssh-agent (paquete: provider-ssh)
+├── totp/                   # RFC 6238 (paquete: provider-totp)
+└── github/                 # OAuth 2.0 + PKCE + mapeo semántico de scopes (paquete: provider-github)
+daemon/                     # binario final — junta todo
 apps/
-└── ui/                    # pendiente — aprobaciones, historial, revocación
+└── ui/                     # pendiente — aprobaciones, historial, revocación
 docs/
-└── threat-model.md        # riesgos identificados y mitigación mínima viable
+└── threat-model.md         # assets, adversarios, riesgos y mitigación mínima viable
 ```
 
 ## Reparto de trabajo
 
-- **Núcleo / seguridad**: `ipc`, `peer-identity`, `secret-store`, `policy`, `credential-manager`, `adapter-ssh`, `audit`
-- **Proveedores / producto**: `adapter-totp`, `adapter-github`, `http-relay`, `apps/ui`
+- **Núcleo / seguridad**: `broker-ipc`, `broker-identity`, `broker-storage`, `broker-policy`, `broker-core`, `providers/ssh`, `broker-audit`
+- **Proveedores / producto**: `providers/totp`, `providers/github`, `broker-http-relay`, `apps/ui`
 
-El contrato `ProviderAdapter` (en `crates/credential-manager/src/lib.rs`) es el límite de sincronización entre ambos — cualquier cambio en su firma se acuerda entre los dos antes de tocarla.
+El contrato `ProviderAdapter` (en `crates/broker-core/src/lib.rs`) es el límite de sincronización entre ambos — cualquier cambio en su firma se acuerda entre los dos antes de tocarla.

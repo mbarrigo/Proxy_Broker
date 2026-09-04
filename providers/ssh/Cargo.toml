@@ -1,0 +1,8 @@
+[package]
+name = "provider-ssh"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+broker-core = { path = "../../crates/broker-core" }
+serde_json = { workspace = true }

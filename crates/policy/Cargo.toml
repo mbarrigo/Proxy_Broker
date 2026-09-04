@@ -1,6 +1,0 @@
-[package]
-name = "policy"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]

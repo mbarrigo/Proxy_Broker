@@ -1,8 +1,0 @@
-[package]
-name = "adapter-ssh"
-version.workspace = true
-edition.workspace = true
-
-[dependencies]
-credential-manager = { path = "../credential-manager" }
-serde_json = { workspace = true }
