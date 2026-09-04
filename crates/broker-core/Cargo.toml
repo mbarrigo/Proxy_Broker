@@ -6,6 +6,7 @@ edition.workspace = true
 [dependencies]
 broker-identity = { path = "../broker-identity" }
 broker-policy = { path = "../broker-policy" }
+broker-audit = { path = "../broker-audit" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

@@ -45,3 +45,55 @@ impl PolicyEngine {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn engine_with_demo_rule() -> PolicyEngine {
+        let mut engine = PolicyEngine::new();
+        engine.add_rule(Rule {
+            executable: "demo-client".into(),
+            allow: vec!["demo.read".into()],
+            deny: vec!["demo.admin".into()],
+        });
+        engine
+    }
+
+    #[test]
+    fn allows_capability_explicitly_allowed() {
+        let engine = engine_with_demo_rule();
+        assert_eq!(engine.evaluate("demo-client", "demo.read"), Decision::Allow);
+    }
+
+    #[test]
+    fn denies_capability_explicitly_denied() {
+        let engine = engine_with_demo_rule();
+        assert_eq!(engine.evaluate("demo-client", "demo.admin"), Decision::Deny);
+    }
+
+    #[test]
+    fn asks_user_for_capability_with_no_explicit_rule() {
+        let engine = engine_with_demo_rule();
+        assert_eq!(engine.evaluate("demo-client", "demo.delete"), Decision::AskUser);
+    }
+
+    #[test]
+    fn denies_by_default_for_unknown_caller() {
+        // Este es el caso "evil-demo": mismo binario, ruta distinta, sin
+        // regla propia -> denegado, no "ask user".
+        let engine = engine_with_demo_rule();
+        assert_eq!(engine.evaluate("evil-demo", "demo.read"), Decision::Deny);
+    }
+
+    #[test]
+    fn deny_wins_over_allow_if_both_listed_for_same_capability() {
+        let mut engine = PolicyEngine::new();
+        engine.add_rule(Rule {
+            executable: "confused".into(),
+            allow: vec!["demo.read".into()],
+            deny: vec!["demo.read".into()],
+        });
+        assert_eq!(engine.evaluate("confused", "demo.read"), Decision::Deny);
+    }
+}

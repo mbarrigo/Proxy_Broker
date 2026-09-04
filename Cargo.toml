@@ -12,6 +12,7 @@ members = [
     "providers/totp",
     "providers/github",
     "daemon",
+    "examples/demo-client",
 ]
 
 [workspace.package]

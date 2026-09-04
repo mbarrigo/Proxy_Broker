@@ -6,6 +6,10 @@ edition.workspace = true
 [dependencies]
 broker-core = { path = "../crates/broker-core" }
 broker-policy = { path = "../crates/broker-policy" }
+broker-identity = { path = "../crates/broker-identity" }
+broker-audit = { path = "../crates/broker-audit" }
+broker-ipc = { path = "../crates/broker-ipc" }
 provider-ssh = { path = "../providers/ssh" }
 provider-totp = { path = "../providers/totp" }
 provider-github = { path = "../providers/github" }
+serde_json = { workspace = true }

@@ -62,13 +62,15 @@ pub trait ProviderAdapter: Send + Sync {
 pub struct CredentialManager {
     adapters: HashMap<String, Box<dyn ProviderAdapter>>,
     policy: PolicyEngine,
+    audit: Box<dyn broker_audit::AuditSink>,
 }
 
 impl CredentialManager {
-    pub fn new(policy: PolicyEngine) -> Self {
+    pub fn new(policy: PolicyEngine, audit: Box<dyn broker_audit::AuditSink>) -> Self {
         Self {
             adapters: HashMap::new(),
             policy,
+            audit,
         }
     }
 
@@ -91,8 +93,20 @@ impl CredentialManager {
             .get(provider)
             .ok_or_else(|| DispatchError::UnknownProvider(provider.to_string()))?;
 
+        let caller_key = caller.policy_key();
         let capability = format!("{provider}.{}", operation.action);
-        match self.policy.evaluate(&caller.exe_path.to_string_lossy(), &capability) {
+        let decision = self.policy.evaluate(&caller_key, &capability);
+
+        // INV-004: toda decisión se audita, incluidas las denegadas —
+        // nunca solo las permitidas.
+        self.audit.record(&broker_audit::AuditEntry {
+            caller_exe: &caller_key,
+            provider,
+            action: &operation.action,
+            decision: decision_label(&decision),
+        });
+
+        match decision {
             Decision::Allow => Ok(adapter.execute(&operation, caller)?),
             Decision::Deny => Err(DispatchError::Denied),
             Decision::AskUser => {
@@ -101,5 +115,13 @@ impl CredentialManager {
                 Err(DispatchError::Denied)
             }
         }
+    }
+}
+
+fn decision_label(decision: &Decision) -> &'static str {
+    match decision {
+        Decision::Allow => "ALLOW",
+        Decision::Deny => "DENY",
+        Decision::AskUser => "ASK_USER (tratado como DENY, ver TODO en dispatch)",
     }
 }

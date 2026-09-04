@@ -38,14 +38,26 @@ consultado antes `PolicyEngine::evaluate`.
 punto de entrada previsto hacia los adapters; no debería añadirse nunca
 un segundo camino que los llame directamente.
 
+Verificado manualmente end-to-end con `demo-client`: mismo binario
+copiado a otra ruta (`evil-demo.exe`) recibe `DENY` en la misma
+operación que el original tiene en `allow` — la decisión depende de la
+identidad real del proceso (PID vía `interprocess::PeerCreds` + ruta
+del ejecutable resuelta desde el PID), no de lo que el cliente diga
+ser. Pendiente: convertir esta comprobación manual en un test de
+integración (`tests/integration/`).
+
 ## INV-004
 
 Todo intento de uso de una credencial genera una entrada de auditoría,
 incluidos los denegados — no solo los permitidos.
 
-Estado actual: **no implementado todavía** — `dispatch()` no llama a
-`AuditSink::record` en ninguna rama. Bloqueante para cerrar la Fase 1
-del roadmap.
+**Implementado** — `CredentialManager::dispatch` llama a
+`AuditSink::record` antes de actuar sobre la decisión, en las tres
+ramas (Allow/Deny/AskUser). Verificado manualmente: `demo-client demo
+admin` (denegado) aparece en el log de auditoría igual que `demo-client
+demo read` (permitido). Pendiente: mover `StdoutSink` a un fichero
+append-only real con rotación, y un test que compruebe que el payload
+de auditoría nunca contiene el secreto (relacionado con INV-002).
 
 ## INV-005
 
