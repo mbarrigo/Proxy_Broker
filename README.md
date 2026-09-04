@@ -29,6 +29,7 @@ Documentos de referencia:
 - **[Credential Broker Blueprint](https://claude.ai/code/artifact/1d25527d-3316-4fdd-b235-04178eee173f)** — arquitectura completa, roadmap, reparto de trabajo, glosario.
 - **[docs/threat-model.md](docs/threat-model.md)** — assets, adversarios, qué protegemos y qué no.
 - **[SECURITY_INVARIANTS.md](SECURITY_INVARIANTS.md)** — reglas que no se pueden romper, con su estado real en el código.
+- **[docs/demo.md](docs/demo.md)** — la demo end-to-end paso a paso: qué pasa internamente en cada petición, y por qué el PID no se puede falsear.
 
 ## Estructura del repo
 
